@@ -2,7 +2,7 @@
 
 function usage() {
    echo "usage:" >&2
-   echo "   pyv [ -r|--recreate | -u|--update ] script.py [args ...]" >&2
+   echo "   pyv [ -r ] [ -u ] [ -p <python-exe> ] script.py [args ...]" >&2
    echo >&2
    echo "Runs the python script at script.py using a local virtualenv" >&2
    echo "specified in script.pyv" >&2
@@ -13,6 +13,8 @@ function usage() {
    echo "       (default is to leave in place if it already exists)" >&2
    echo "   -u: update an existing virtualenv" >&2
    echo "       (default is to use as is if it already exists)" >&2
+   echo "   -p: Use python specified by <python-exe>" >&2
+   echo "       (default is to use whatever \"python\" points to)" >&2
 }
 
 if [[ $# -lt 1 ]]; then
@@ -20,23 +22,36 @@ if [[ $# -lt 1 ]]; then
    exit 1
 fi
 
-if [[ "$1" == "-?" || "$1" == "-h" || "$1" == "-help" || "$1" == "--help" ]]; then
-   usage
-   exit 1
-fi
+# defaults
+recreate=""
+update=""
+python="python"
 
-if [[ "$1" == "-r" || "$1" == "--recreate" ]]; then
-   recreate=1
-   shift
-fi
+# option parsing
+while getopts "hrup:" arg; do
+   case "$arg" in
+      "r") recreate=1 ;;
+      "u") update=1 ;;
+      "p") python="$OPTARG" ;;
+      "h") usage; exit 1 ;;
+      "?") usage; exit 1 ;;
+      *) usage; exit 1 ;;
+   esac
+done
 
-if [[ "$1" == "-u" || "$1" == "--update" ]]; then
-   update=1
-   shift
-fi
+# skip through the options
+shift_amt=$(( $OPTIND - 1 ))
+shift $shift_amt
 
 script_name=$1
 shift
+
+if [[ ! -r $script_name ]]; then
+   echo "ERROR: File not found $script_name" >&2
+   echo >&2
+   usage
+   exit 1
+fi
 
 script_dirname=$(dirname $script_name)
 script_basename=$(basename $script_name)
@@ -63,8 +78,8 @@ if [[ -n "$recreate" ]]; then
    fi
    mkdir -p $pyv_dir
    # this will respect anything set by pyenv
-   python=$(which python)
-   virtualenv -p $python $venv_dir >&2
+   python_exe=$(which $python)
+   virtualenv -p $python_exe $venv_dir >&2
 fi
 
 if [[ ! -r "$venv_dir/bin/activate" ]]; then
@@ -80,7 +95,7 @@ fi
 # temporarily disable errexit (#!/bin/bash -e) so that we can cleanly deal with
 # calling a script that might fail, and exitting with its exit value
 set +o errexit
-python $script_name "$@"
+$python $script_name "$@"
 exitval=$?
 set -o errexit
 

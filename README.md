@@ -19,11 +19,10 @@ I'll add this later. I promise.
 ### Writing a script
 
 Write your script `foo.py`, but you don't have to stick to the Python standard
-library. Use any packages available in [pypi](https://pypi.org/) that you want.
+library. Use any packages available in [pypi][] that you want.
 
 Create a file `foo.pyv` that lists your requirements, and put it in the same
-dir as `foo.py`. You can use version
-[PEP 440](https://www.python.org/dev/peps/pep-0440/)-compliant version range
+dir as `foo.py`. You can use version [PEP 440][]-compliant version range
 specifiers (e.g. `requests>=2.21.0,>2.22`), but you can also just specify the
 package name (e.g. `requests`), if you just want the latest. Just as if you
 were writing a `setup.py` file and creating a package for your script. But you
@@ -43,9 +42,9 @@ Run your Python script as you normally would, but instead of `python`, use
 This will create a Python virtualenv as needed, with your requirements
 installed, in `.pyv/myscript`. Whatever Python executable is valid at the time
 you initially create the virtualenv will be respected as long as the
-virtualenv exists. This allows you to, for example, use
-[pyenv](https://github.com/pyenv/pyenv) to change Python the version to
-whatever you want, and it will persist for the running of that script.
+virtualenv exists. This allows you to, for example, use [pyenv][] to change
+Python the version to whatever you want, and it will persist for the running
+of that script.
 
 To update the dependencies within the virtualenv (e.g. if you change your
 requirements file, or if you have an open ended version and want to update to
@@ -54,4 +53,13 @@ the latest), use `pyv -u`. (This will **not** change the Python version.)
 To completely recreate the virtualenv from scratch, use `pyv -r`. (This
 **will** change the Python version if applicable.)
 
-For a complete usage statement, use `pyv --help`.
+If you need to explicitly point to the Python executable (e.g. if you don't
+have [pyenv][] installed and want to explicitly reference `python3`), use `-p`
+_`python-exe`_. This can point to either a short name, or a complete name
+including full path.
+
+For a complete usage statement, use `pyv -h`.
+
+[pypi]: https://pypi.org/
+[PEP 440]: https://www.python.org/dev/peps/pep-0440/
+[pyenv]: https://github.com/pyenv/pyenv
