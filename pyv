@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+# pyv - On the fly Python virtualenv management for scripts.
+#
+# Author: Rich Fromm
+# Source: https://github.com/richfromm/pyv
+# License: Copy freely, but please retain attribution.
+
 function usage() {
    echo "usage:" >&2
    echo "   pyv [ -r ] [ -u ] [ -p <python-exe> ] script.py [args ...]" >&2
