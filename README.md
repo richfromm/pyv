@@ -12,7 +12,50 @@ On the fly Python virtualenv management for scripts.
 
 ## Motivation
 
-I'll add this later. I promise.
+Python has a large collection of useful software libraries, via
+[pypi][]. For packaging a large application, there
+are numerous solutions for dealing with dependencies. But these can be
+a bit cumbersome to deal with if all you're trying to do is write a
+short script and share it with others.
+
+A common case is [requests][]. If you're not using it for HTTP
+requests in Python, you probably should. (Or at least give it a look.)
+But it's not in the Python standard library. Which means that if I
+have the following in my Python script:
+
+```
+import requests
+```
+
+Someone running it is likely to get the error:
+
+```
+ModuleNotFoundError: No module named 'requests'
+```
+
+For a while I dealt with this, for cases in which I didn't want to
+deal with real packaging, by just including a comment saying something
+like `# use requests virtualenv`. But that's a bit of a barrier,
+esp. if I'm sharing it with someone who's not that familiar with
+Python, and now I need to go on a tangent explaining virtual
+environments.
+
+`pyv` allows you to specify the dependency on requests in a separate
+file (which admittedly is similar to what you would do with
+`setup.py`), but then the user only needs to execute your script using
+`pyv`, rather than `python`, and everything else is automatic.
+
+Admittedly, this does require a one-time setup of putting `pyv` in
+your `PATH`. Which could potentially be a bigger hurdle than trying to
+explain virtual environments.
+
+## Prereqs
+
+* [virtualenv][] **is** required
+
+* [virtualenvwrapper][] is **not** required
+
+* Put `pyv` in your `PATH`
 
 ## Usage
 
@@ -60,6 +103,11 @@ including full path.
 
 For a complete usage statement, use `pyv -h`.
 
+<!-- links -->
+
 [pypi]: https://pypi.org/
 [PEP 440]: https://www.python.org/dev/peps/pep-0440/
 [pyenv]: https://github.com/pyenv/pyenv
+[requests]: https://pypi.org/project/requests/
+[virtualenv]: https://virtualenv.pypa.io/en/latest/
+[virtualenvwrapper]: https://virtualenvwrapper.readthedocs.io/en/latest/
