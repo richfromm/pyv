@@ -43,7 +43,8 @@ environments.
 `pyv` allows you to specify the dependency on requests in a separate
 file (which admittedly is similar to what you would do with
 `setup.py`), but then the user only needs to execute your script using
-`pyv`, rather than `python`, and everything else is automatic.
+`pyv`, rather than `python`, and everything else is automatic. No need
+to deal with any packaging, by either the developer or the end user.
 
 Admittedly, this does require a one-time setup of putting `pyv` in
 your `PATH`. Which could potentially be a bigger hurdle than trying to
